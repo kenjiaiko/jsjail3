@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<script type="text/javascript" src="jail.js"></script>
+		<title>jsjail</title>
+		<script language="JavaScript">
+			function exec() {
+				if (confirm("execute?")) {
+					localStorage.code = document.getElementById("src").value;
+					location.reload(true);
+				}
+			}
+			function load() {
+				if (localStorage.code !== undefined) {
+					document.getElementById("src").value = localStorage.code;
+					var jail = new jsJail(null);
+					var t;
+					if (jail.eval(localStorage.code)) {
+						var o = jail.result();
+						t = document.createTextNode(o['err']);
+					} else {
+						t = document.createTextNode(jail.log["output"]);
+					}
+					var r = document.getElementById("result");
+					r.appendChild(t);
+					delete jail;
+				} else {
+					document.getElementById("src").value = ''
+						+ 'var txt = "";' + "\n"
+						+ 'for(var i=0; i < 3; i++){' + "\n"
+						+ '  txt += "Hello World!\\n";' + "\n"
+						+ '}' + "\n"
+						+ 'output = txt;';
+				}
+			}
+		</script>
+	</head>
+	<body onload="load()">
+		<h1 style="font-size:120%;font-weight:bold">jsjail</h1>
+		<div>
+			<div>
+				<textarea style="width:400px;height:248px;" id="src"></textarea><br />
+				<input type="button" style="background: #ffffff;" value="EXEC" onClick="exec()">
+			</div>
+			<div>
+				<pre id="result"></pre>
+			</div>
+			<div style="width:410px;text-align:right;margin-top:2em;padding-top:0.5em;border-top:solid 1px black"><a href="http://07c00.com/">07c00.com</a></div>
+			</div>
+		</div>
+	</body>
+</html>
